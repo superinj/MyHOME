@@ -550,8 +550,9 @@ class MyHOMEIlluminanceSensor(MyHOMEEntity, SensorEntity):
     def handle_event(self, message: OWNLightingEvent):
         """Handle an event message."""
         if message.message_type == MESSAGE_TYPE_ILLUMINANCE:
-            # if message.illuminance == 65535:
-            #     return True
             LOGGER.info(message.human_readable_log)
-            self._attr_native_value = message.illuminance
+            if message.illuminance == 65535:
+                self._attr_native_value = 0
+            else:
+                self._attr_native_value = message.illuminance
             self.async_schedule_update_ha_state()
