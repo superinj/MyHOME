@@ -9,7 +9,7 @@ from homeassistant.components.cover import (
     SUPPORT_OPEN,
     SUPPORT_SET_POSITION,
     SUPPORT_STOP,
-    DEVICE_CLASS_SHUTTER,
+    CoverDeviceClass,
     CoverEntity,
 )
 
@@ -58,6 +58,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 async def async_setup_platform(
     hass, config, async_add_entities, discovery_info=None
 ):  # pylint: disable=unused-argument
+    if CONF not in hass.data[DOMAIN]:
+        return False
     hass.data[DOMAIN][CONF][PLATFORM] = {}
     _configured_covers = config.get(CONF_DEVICES)
 
@@ -136,7 +138,7 @@ async def async_unload_entry(hass, config_entry):  # pylint: disable=unused-argu
 
 class MyHOMECover(MyHOMEEntity, CoverEntity):
 
-    device_class = DEVICE_CLASS_SHUTTER
+    device_class = CoverDeviceClass.SHUTTER
 
     def __init__(
         self,
